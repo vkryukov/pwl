@@ -19,14 +19,13 @@ StyleBox[\"obj\",\nFontSize->12,\nFontSlant->\"Italic\"]\) into a markdown file 
 Begin["`Private`"];
 
 
-nbCells[nb_NotebookObject] :=
-	Cases[
-		NotebookGet[nb],
-		Cell[
-			_, 
-			"Text"|"Input"|"Output"|"Section"|"Subsection"|"Subsubsection"|"Item"|"Subitem"|"Subsubitem", 
-			___],
-		Infinity]
+nbCells[nb_NotebookObject] := Cases[
+	NotebookGet[nb],
+	Cell[
+		_, 
+		"Text"|"Input"|"Output"|"Section"|"Subsection"|"Subsubsection"|"Item"|"Subitem"|"Subsubitem", 
+		___],
+	Infinity]
 
 
 (* ::Subsubsection:: *)
@@ -88,17 +87,21 @@ processCell[cell:Cell[text_String, "SubsubitemNumbered"]] := "\n    1. " <> text
 
 
 (* ::Text:: *)
-(*We convert all inputs and outputs to a PNG file. The three global variables $pageWidth, $imageOutputDir, and $imageNumber will be provided by ConvertToMarkdown.*)
+(*We convert all inputs and outputs to a PNG file. We also need to export images (such as screenshots etc.) that we copy pasted directly into notebook; they will typically reside in either Code or Text cell. The three global variables $pageWidth, $imageOutputDir, and $imageNumber will be provided by ConvertToMarkdown.*)
 
 
-processCell[cell:Cell[data_, "Input"|"Output", ___]] := 
-	Module[
-		{imageName = "image" <> IntegerString[$imageNumber] <> ".png"},
-		Export[
-			FileNameJoin[{$imageOutputDir, imageName}],
-			Append[cell, PageWidth->$pageWidth]];
-		$imageNumber++;
-		"![" <> imageName <> "](" <> $imagePrefix <> imageName <> ")"]
+processCell[cell:Cell[data_, "Input"|"Output", ___]] := exportCell[cell, True]
+processCell[cell:Cell[BoxData[GraphicsBox[___], __]]] := exportCell[cell, False]
+
+exportCell[cell_, limitPageWidth_?BooleanQ] := Module[
+	{imageName = "image" <> IntegerString[$imageNumber] <> ".png"},
+	Export[
+		FileNameJoin[{$imageOutputDir, imageName}],
+		If[limitPageWidth,
+			Append[cell, PageWidth->$pageWidth],
+			cell]];
+	$imageNumber++;
+	"![" <> imageName <> "](" <> $imagePrefix <> imageName <> ")"]
 
 
 (* ::Subsubsection:: *)
