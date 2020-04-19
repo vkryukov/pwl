@@ -152,25 +152,53 @@ Options[ConvertToMarkdown] = {
 
 
 (* ::Text:: *)
+(*An optional summary can be provided. It is delimited by a Subsubsection called "Summary", which should occur right after the date, and the following (sub..)section. If such section exists, it's content will be inserted as an excerpt on the summary page, otherwise excerpt will only contain the first cell.*)
+
+
+(* ::Text:: *)
+(*The following function returns a place where jekyll delimiter for excerpt (by default, <!--more-->) should be inserted.*)
+
+
+findExcerpt[cells_List] := Module[
+	{pos},
+	If[
+		MatchQ[cells[[3]], Cell["Summary", "Subsubsection"]],
+		(* True - looking for (sub...) section *)
+		pos = Position[cells[[4;;]], Cell[_, "Section"|"Subsection"|"Subsubsection"]];
+		If[Length[pos] > 0, pos[[1,1]], 1],
+		(* False *)
+		1]]
+
+
+(* ::Text:: *)
 (*As the output of the conversion, we put resulting markdown in _posts/, all the generated images in it's own folder under assets/, and the compressed original notebook into /assets/notebooks.*)
 
 
 ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 	{$pageWidth = OptionValue["width"], target = OptionValue["jekyllDir"],
 	 $imageNumber=1, $imageOutputDir, $imagePrefix, 
-	 cells = nbCells[nb], header, title, date, postName, output},
+	 cells = nbCells[nb], processedCells,
+	 header, title, date, excerpt,
+	 postName, output},
 		 
 	target = ExpandFileName[target];
 	header = getHeader[cells]; If[FailureQ[header], Return[$Failed]];
 	{title, date} = header;
+	excerpt = findExcerpt[cells];
+	
 	postName = date <> "-" <> StringReplace[ ToLowerCase[title], Except[LetterCharacter]..->"-"];
 	$imageOutputDir = FileNameJoin[{target, "assets", postName}];
+	CreateDirectory[$imageOutputDir];
 	$imagePrefix = "/assets/" <> postName <>"/";
 	
-	CreateDirectory[$imageOutputDir];
+	processedCells = processCell /@ cells[[3;;]];
+	processedCells = Insert[processedCells, "\n\n<!--more-->\n\n", excerpt + 1];
+	(* Remove explicit Summary title *)
+	If[excerpt > 1, processedCells = Delete[processedCells, 1]];
+
 	output = Join[
 		{"---\nlayout: post\ntitle: "<>title<>"\n---"},
-		processCell /@ cells[[3;;]],
+		processedCells,
 		{"[<small>Download this notebook</small>](/assets/notebooks/"<>postName<>".nb.gz)"}];
 	Export[
 		FileNameJoin[{target, "_posts", postName <> ".markdown"}],
