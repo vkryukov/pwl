@@ -191,8 +191,10 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 	CreateDirectory[$imageOutputDir];
 	$imagePrefix = "/assets/" <> postName <>"/";
 	
-	processedCells = processCell /@ cells[[3;;]];
-	processedCells = Insert[processedCells, "\n\n<!--more-->\n\n", excerpt + 1];
+	processedCells = Insert[
+		processCell /@ cells[[3;;]],
+		"\n\n<!--more-->\n\n", 
+		excerpt + 1];
 	(* Remove explicit Summary title *)
 	If[excerpt > 1, processedCells = Delete[processedCells, 1]];
 
