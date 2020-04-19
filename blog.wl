@@ -12,6 +12,13 @@ StyleBox[\"obj\",\nFontSize->12,\nFontSlant->\"Italic\"]\)] converts notebook re
 StyleBox[\"obj\",\nFontSize->12,\nFontSlant->\"Italic\"]\) into a markdown file and writes it to Jekyll directory.";
 
 
+CopyTextToClipboard::usage="CopyTextToClipboard[obj] extracts all text from notebook represented by notebook object" <>
+	" obj and copies it into a clipboard";
+
+
+NotebookWordCount::usage="BlogWordCount returns number of words (not counting formulas) in notebook represented by notebook object";
+
+
 (* ::Subsection:: *)
 (*Private interface*)
 
@@ -210,6 +217,19 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 	Export[
 		FileNameJoin[{target, "assets", "notebooks", postName <> ".nb.gz"}],
 		nb];]
+
+
+(* ::Subsubsection:: *)
+(*Extracting text*)
+
+
+CopyTextToClipboard[obj_] := CopyToClipboard[extractText[obj]]
+NotebookWordCount[obj_] := WordCount[extractText[obj]]
+
+extractText[obj_] := StringRiffle[
+	NotebookImport[obj, "Text"|"Section"|"Subsection"|"Subsubsection""Item"|
+		"Subitem"|"Subsubitem"|"ItemNumbered"|"SubitemNumbered"|"SubsubitemNumbered"->"Text"],
+	"\n\n"]
 
 
 (* ::Subsection:: *)
