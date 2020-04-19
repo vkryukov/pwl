@@ -8,7 +8,7 @@ BeginPackage["Blog`"];
 
 
 ConvertToMarkdown::usage="ConvertToMarkdown[\!\(\*
-StyleBox[\"obj\",\nFontSize->12,\nFontSlant->\"Italic\"]\)] convert notebook represented by notebook object \!\(\*
+StyleBox[\"obj\",\nFontSize->12,\nFontSlant->\"Italic\"]\)] converts notebook represented by notebook object \!\(\*
 StyleBox[\"obj\",\nFontSize->12,\nFontSlant->\"Italic\"]\) into a markdown file and writes it to Jekyll directory.";
 
 
