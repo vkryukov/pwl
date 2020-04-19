@@ -216,7 +216,7 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 End[];
 
 
-(* Protect[ConvertToMarkdown]; *)
+Protect[ConvertToMarkdown];
 
 
 EndPackage[];
