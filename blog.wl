@@ -23,7 +23,8 @@ nbCells[nb_NotebookObject] := Cases[
 	NotebookGet[nb],
 	Cell[
 		_, 
-		"Text"|"Input"|"Output"|"Section"|"Subsection"|"Subsubsection"|"Item"|"Subitem"|"Subsubitem", 
+		"Text"|"Input"|"Output"|"Section"|"Subsection"|"Subsubsection"|
+		"Item"|"Subitem"|"Subsubitem"|"ItemNumbered"|"SubitemNumbered"|"SubsubitemNumbered", 
 		___],
 	Infinity]
 
