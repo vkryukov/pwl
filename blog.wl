@@ -13,10 +13,13 @@ StyleBox[\"obj\",\nFontSize->12,\nFontSlant->\"Italic\"]\) into a markdown file 
 
 
 CopyTextToClipboard::usage="CopyTextToClipboard[obj] extracts all text from notebook represented by notebook object" <>
-	" obj and copies it into a clipboard";
+	" obj and copies it into a clipboard.";
 
 
-NotebookWordCount::usage="BlogWordCount returns number of words (not counting formulas) in notebook represented by notebook object";
+NotebookWordCount::usage="NotebookWordCount[obj] returns number of words (not counting formulas) in notebook represented by notebook object obj.";
+
+
+NotebookWordCloud::usage="NotebookWordCloud[obj] returns a world cloud of notebook represented by notebook object obj."
 
 
 (* ::Subsection:: *)
@@ -216,7 +219,10 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 		"Text"];
 	Export[
 		FileNameJoin[{target, "assets", "notebooks", postName <> ".nb.gz"}],
-		nb];]
+		nb];
+	Export[
+		FileNameJoin[{target, "assets", postName, "wordcloud.png"}],
+		NotebookWordCloud[nb]];]
 
 
 (* ::Subsubsection:: *)
@@ -225,6 +231,12 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 
 CopyTextToClipboard[obj_] := CopyToClipboard[extractText[obj]]
 NotebookWordCount[obj_] := WordCount[extractText[obj]]
+NotebookWordCloud[obj_, maxItems_Integer:57] := WordCloud[
+	extractText[obj],
+	WordSelectionFunction -> (And[StringLength[#]>3, StringMatchQ[#, LetterCharacter..]]&),
+	ImageSize -> {740,100},
+	ColorFunction->ColorData["GrayTones"],
+	MaxItems -> maxItems]
 
 extractText[obj_] := StringRiffle[
 	NotebookImport[obj, "Text"|"Section"|"Subsection"|"Subsubsection""Item"|
