@@ -112,7 +112,7 @@ exportCell[cell_, limitPageWidth_?BooleanQ, tag_:""] := Module[
 			Append[cell, PageWidth->$pageWidth],
 			cell]];
 	$imageNumber++;
-	If[tag != "", "{:."<>tag<>"}\n"]<>"![" <> imageName <> "](" <> $imagePrefix <> imageName <> ")"]
+	If[tag != "", "{:."<>tag<>"}\n",""]<>"![" <> imageName <> "](" <> $imagePrefix <> imageName <> ")"]
 
 
 (* ::Subsubsection:: *)
