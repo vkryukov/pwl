@@ -101,10 +101,10 @@ processCell[cell:Cell[text_String, "SubsubitemNumbered"]] := "\n    1. " <> text
 (*We convert all inputs and outputs to a PNG file. We also need to export images (such as screenshots etc.) that we copy pasted directly into notebook; they will typically reside in either Code or Text cell. The three global variables $pageWidth, $imageOutputDir, and $imageNumber will be provided by ConvertToMarkdown.*)
 
 
-processCell[cell:Cell[data_, "Input"|"Output", ___]] := exportCell[cell, True]
+processCell[cell:Cell[data_, tag:"Input"|"Output", ___]] := exportCell[cell, True, tag]
 processCell[cell:Cell[BoxData[GraphicsBox[___], __]]] := exportCell[cell, False]
 
-exportCell[cell_, limitPageWidth_?BooleanQ] := Module[
+exportCell[cell_, limitPageWidth_?BooleanQ, tag_:""] := Module[
 	{imageName = "image" <> IntegerString[$imageNumber] <> ".png"},
 	Export[
 		FileNameJoin[{$imageOutputDir, imageName}],
@@ -112,7 +112,7 @@ exportCell[cell_, limitPageWidth_?BooleanQ] := Module[
 			Append[cell, PageWidth->$pageWidth],
 			cell]];
 	$imageNumber++;
-	"![" <> imageName <> "](" <> $imagePrefix <> imageName <> ")"]
+	If[tag != "", "{:."<>tag<>"}\n"]<>"![" <> imageName <> "](" <> $imagePrefix <> imageName <> ")"]
 
 
 (* ::Subsubsection:: *)
