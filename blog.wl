@@ -251,7 +251,7 @@ extractText[obj_] := StringRiffle[
 End[];
 
 
-Protect[ConvertToMarkdown];
+(*Protect[ConvertToMarkdown];*)
 
 
 EndPackage[];
