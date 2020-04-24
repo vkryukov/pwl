@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       161,          7]
-NotebookDataLength[      2787,         75]
-NotebookOptionsPosition[      2305,         60]
-NotebookOutlinePosition[      2721,         76]
-CellTagsIndexPosition[      2678,         73]
+NotebookDataLength[      3561,         94]
+NotebookOptionsPosition[      2919,         78]
+NotebookOutlinePosition[      3335,         94]
+CellTagsIndexPosition[      3292,         91]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -32,37 +32,55 @@ Cell[StyleData["Notebook"],
            "Helvetica", FontSize -> 16, FontWeight -> Bold], StripOnInput -> 
           False], 
          TemplateBox[{1}, "Spacer1"], 
-         ItemBox[
-          TemplateBox[{
-            ButtonBox[
-            "\"Publish\"", ButtonFunction :> Blog`ConvertToMarkdown[
-               InputNotebook[]], Method -> "Queued", Appearance -> Automatic, 
-             Evaluator -> Automatic], 
-            ButtonBox[
-            "\"Copy text\"", ButtonFunction :> 
-             Blog`CopyTextToClipboard[
-               InputNotebook[]], Appearance -> Automatic, Evaluator -> 
-             Automatic, Method -> "Preemptive"], 
-            ButtonBox["\"Word cloud\"", ButtonFunction :> CreateDocument[
-               Blog`NotebookWordCloud[
-                InputNotebook[]]], Appearance -> Automatic, Evaluator -> 
-             Automatic, Method -> "Preemptive"], 
-            ButtonBox["\"Count words\"", ButtonFunction :> MessageDialog[
-               StringJoin["Number of words: ", 
-                ToString[
-                 Blog`NotebookWordCount[
-                  InputNotebook[]]]]], Appearance -> Automatic, Evaluator -> 
-             Automatic, Method -> "Preemptive"]}, "RowDefault"], StripOnInput -> 
-          False]}}, AutoDelete -> False, 
-       GridBoxItemSize -> {
+         ButtonBox[
+         "\"Publish\"", Appearance -> Automatic, ButtonFunction :> 
+          Blog`ConvertToMarkdown[
+            InputNotebook[]], Evaluator -> Automatic, Method -> "Queued"], 
+         ButtonBox[
+         "\"Copy text\"", Appearance -> Automatic, ButtonFunction :> 
+          Blog`CopyTextToClipboard[
+            InputNotebook[]], Evaluator -> Automatic, Method -> "Preemptive"], 
+         ButtonBox[
+         "\"Word cloud\"", Appearance -> Automatic, ButtonFunction :> 
+          CreateDocument[
+            Blog`NotebookWordCloud[
+             InputNotebook[]]], Evaluator -> Automatic, Method -> 
+          "Preemptive"], 
+         ButtonBox[
+         "\"Count words\"", Appearance -> Automatic, ButtonFunction :> 
+          MessageDialog[
+            StringJoin["Number of words: ", 
+             ToString[
+              Blog`NotebookWordCount[
+               InputNotebook[]]]]], Evaluator -> Automatic, Method -> 
+          "Preemptive"], 
+         TemplateBox[{100}, "Spacer1"], 
+         ButtonBox[
+         "\"New blog\"", Appearance -> Automatic, ButtonFunction :> 
+          CreateDocument[{
+             Cell["Title", "Section"], 
+             Cell[
+              DateString[{"MonthNameShort", " ", "Day", ", ", "Year"}], 
+              "Text"], 
+             Cell["Summary", "Subsubsection"], 
+             Cell["summary text", "Text"], 
+             Cell["Main", "Subsubsection"], 
+             Cell["main text", "Text"]}, StyleDefinitions -> "Blog.nb"], 
+          Evaluator -> Automatic, Method -> "Preemptive"]}}, AutoDelete -> 
+       False, GridBoxItemSize -> {
         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], "Grid"]], 
-    "DockedCell", Background -> RGBColor[0.87, 0.94, 1]]}]
+    "DockedCell", Background -> 
+    RGBColor[0.87, 0.94, 
+      1]]},ExpressionUUID->"370914e6-7913-4201-9ffd-e40876e8c170"],
+
+Cell[StyleData["Section"],
+ CellFrame->False,ExpressionUUID->"78e5f61f-9213-40f6-a37f-222d67d358be"]
 },
 WindowSize->{808, 911},
-WindowMargins->{{100, Automatic}, {240, Automatic}},
+WindowMargins->{{Automatic, 896}, {215, Automatic}},
 FrontEndVersion->"12.1 for Mac OS X x86 (64-bit) (March 20, 2020)",
 StyleDefinitions->"PrivateStylesheetFormatting.nb",
-ExpressionUUID->"a549f31c-99cb-422c-9eff-3ca661930759"
+ExpressionUUID->"264c1e70-79d1-4a3b-90a1-af74ec78cb6e"
 ]
 (* End of Notebook Content *)
 
@@ -76,7 +94,8 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[561, 20, 104, 0, 36, 49, 0, "StyleData", "StyleDefinitions", "",ExpressionUUID->"ad67a915-cbfc-4cce-86bf-2318cce7d69c"],
-Cell[668, 22, 1633, 36, 39,ExpressionUUID->"01b94a02-4c2b-4789-ae90-06c046445def"]
+Cell[668, 22, 2144, 51, 36, 27, 0, "StyleData", "Notebook", "All",ExpressionUUID->"370914e6-7913-4201-9ffd-e40876e8c170"],
+Cell[2815, 75, 100, 1, 77, 26, 0, "StyleData", "Section", "All",ExpressionUUID->"78e5f61f-9213-40f6-a37f-222d67d358be"]
 }
 ]
 *)
