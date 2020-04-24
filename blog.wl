@@ -189,7 +189,7 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 	{$pageWidth = OptionValue["width"], target = OptionValue["jekyllDir"],
 	 $imageNumber=1, $imageOutputDir, $imagePrefix, 
 	 cells = nbCells[nb], processedCells,
-	 header, title, date, excerpt,
+	 header, title, date, excerpt, wordcloud,
 	 postName, output},
 		 
 	target = ExpandFileName[target];
@@ -197,11 +197,12 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 	{title, date} = header;
 	excerpt = findExcerpt[cells];
 	
+	
 	postName = date <> "-" <> StringReplace[ ToLowerCase[title], Except[LetterCharacter]..->"-"];
 	$imageOutputDir = FileNameJoin[{target, "assets", postName}];
 	CreateDirectory[$imageOutputDir];
 	$imagePrefix = "/assets/" <> postName <>"/";
-	
+	wordcloud = FileNameJoin[{"/assets", postName, "wordcloud.png"}];
 	processedCells = Insert[
 		processCell /@ cells[[3;;]],
 		"\n\n<!--more-->\n\n", 
@@ -210,7 +211,7 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 	If[excerpt > 1, processedCells = Delete[processedCells, 1]];
 
 	output = Join[
-		{"---\nlayout: post\ntitle: "<>title<>"\n---"},
+		{"---\nlayout: post\ntitle: "<>title<>"\nwordcloud: "<>wordcloud<>"\n---"},
 		processedCells,
 		{"[<small>Download this notebook</small>](/assets/notebooks/"<>postName<>".nb.gz)"}];
 	Export[
@@ -221,7 +222,7 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 		FileNameJoin[{target, "assets", "notebooks", postName <> ".nb.gz"}],
 		nb];
 	Export[
-		FileNameJoin[{target, "assets", postName, "wordcloud.png"}],
+		FileNameJoin[{target, wordcloud}],
 		NotebookWordCloud[nb]];]
 
 
@@ -234,7 +235,7 @@ NotebookWordCount[obj_] := WordCount[extractText[obj]]
 NotebookWordCloud[obj_, maxItems_Integer:57] := WordCloud[
 	extractText[obj],
 	WordSelectionFunction -> (And[StringLength[#]>3, StringMatchQ[#, LetterCharacter..]]&),
-	ImageSize -> {740,100},
+	ImageSize -> {700,100},
 	ColorFunction->ColorData["GrayTones"],
 	MaxItems -> maxItems]
 
