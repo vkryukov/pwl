@@ -102,7 +102,7 @@ processCell[cell:Cell[text_String, "SubsubitemNumbered"]] := "\n    1. " <> text
 
 
 processCell[cell:Cell[data_, tag:"Input"|"Output", ___]] := exportCell[cell, True, tag]
-processCell[cell:Cell[BoxData[GraphicsBox[___], __]]] := exportCell[cell, False]
+processCell[cell:Cell[BoxData[GraphicsBox[___]], __]] := exportCell[cell, False]
 
 exportCell[cell_, limitPageWidth_?BooleanQ, tag_:""] := Module[
 	{imageName = "image" <> IntegerString[$imageNumber] <> ".png"},
