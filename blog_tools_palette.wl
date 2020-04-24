@@ -28,3 +28,6 @@ Grid[{{
 	Spacer[100],
 	buttons[[5]]
 }}]
+
+
+CellPrint[%]
