@@ -252,7 +252,7 @@ NotebookWordCloud[obj_, maxItems_Integer:57] := WordCloud[
 	extractText[obj],
 	WordSelectionFunction -> (And[StringLength[#]>3, StringMatchQ[#, LetterCharacter..]]&),
 	ImageSize -> {700,100},
-	ColorFunction->ColorData["GrayTones"],
+	ColorFunction->ColorData["Pastel"],
 	MaxItems -> maxItems]
 
 extractText[obj_] := StringRiffle[
