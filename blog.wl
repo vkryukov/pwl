@@ -189,7 +189,7 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 	{$pageWidth = OptionValue["width"], target = OptionValue["jekyllDir"],
 	 $imageNumber=1, $imageOutputDir, $imagePrefix, 
 	 cells = nbCells[nb], processedCells,
-	 header, title, date, excerpt, wordcloud,
+	 header, title, date, excerpt, wordcloud, source,
 	 postName, output},
 		 
 	target = ExpandFileName[target];
@@ -203,6 +203,7 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 	CreateDirectory[$imageOutputDir];
 	$imagePrefix = "/assets/" <> postName <>"/";
 	wordcloud = FileNameJoin[{"/assets", postName, "wordcloud.png"}];
+	source = "/assets/notebooks/" <> postName <> ".nb.gz";
 	processedCells = Insert[
 		processCell /@ cells[[3;;]],
 		"\n\n<!--more-->\n\n", 
@@ -211,7 +212,12 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 	If[excerpt > 1, processedCells = Delete[processedCells, 1]];
 
 	output = Join[
-		{"---\nlayout: post\ntitle: "<>title<>"\nwordcloud: "<>wordcloud<>"\n---"},
+		generateFrontMatter[<|
+			"layout" -> "post", 
+			"title" -> title, 
+			"wordcloud" -> wordcloud,
+			"source" -> source
+			|>],
 		processedCells,
 		{"[<small>Download this notebook</small>](/assets/notebooks/"<>postName<>".nb.gz)"}];
 	Export[
@@ -219,11 +225,21 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 		StringRiffle[output, "\n\n"],
 		"Text"];
 	Export[
-		FileNameJoin[{target, "assets", "notebooks", postName <> ".nb.gz"}],
+		FileNameJoin[{target, source}],
 		nb];
 	Export[
 		FileNameJoin[{target, wordcloud}],
 		NotebookWordCloud[nb]];]
+
+
+generateFrontMatter[assoc_] := {StringRiffle[
+	{
+		"---", 
+		Splice@KeyValueMap[Function[{key,value}, key <> ": " <> value], assoc], 
+		"---", 
+		"\n"
+	},
+	"\n"]}
 
 
 (* ::Subsubsection:: *)
