@@ -1,0 +1,85 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='WolframDesktop 12.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       161,          7]
+NotebookDataLength[      2787,         75]
+NotebookOptionsPosition[      2305,         60]
+NotebookOutlinePosition[      2721,         76]
+CellTagsIndexPosition[      2678,         73]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[StyleData[StyleDefinitions -> "Default.nb"],ExpressionUUID->"ad67a915-cbfc-4cce-86bf-2318cce7d69c"],
+
+Cell[StyleData["Notebook"],
+ DockedCells->{
+   Cell[
+    BoxData[
+     TagBox[
+      GridBox[{{
+         ItemBox[
+          StyleBox[
+          "\"Practical Wolf\"", StripOnInput -> False, FontFamily -> 
+           "Helvetica", FontSize -> 16, FontWeight -> Bold], StripOnInput -> 
+          False], 
+         TemplateBox[{1}, "Spacer1"], 
+         ItemBox[
+          TemplateBox[{
+            ButtonBox[
+            "\"Publish\"", ButtonFunction :> Blog`ConvertToMarkdown[
+               InputNotebook[]], Method -> "Queued", Appearance -> Automatic, 
+             Evaluator -> Automatic], 
+            ButtonBox[
+            "\"Copy text\"", ButtonFunction :> 
+             Blog`CopyTextToClipboard[
+               InputNotebook[]], Appearance -> Automatic, Evaluator -> 
+             Automatic, Method -> "Preemptive"], 
+            ButtonBox["\"Word cloud\"", ButtonFunction :> CreateDocument[
+               Blog`NotebookWordCloud[
+                InputNotebook[]]], Appearance -> Automatic, Evaluator -> 
+             Automatic, Method -> "Preemptive"], 
+            ButtonBox["\"Count words\"", ButtonFunction :> MessageDialog[
+               StringJoin["Number of words: ", 
+                ToString[
+                 Blog`NotebookWordCount[
+                  InputNotebook[]]]]], Appearance -> Automatic, Evaluator -> 
+             Automatic, Method -> "Preemptive"]}, "RowDefault"], StripOnInput -> 
+          False]}}, AutoDelete -> False, 
+       GridBoxItemSize -> {
+        "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], "Grid"]], 
+    "DockedCell", Background -> RGBColor[0.87, 0.94, 1]]}]
+},
+WindowSize->{808, 911},
+WindowMargins->{{100, Automatic}, {240, Automatic}},
+FrontEndVersion->"12.1 for Mac OS X x86 (64-bit) (March 20, 2020)",
+StyleDefinitions->"PrivateStylesheetFormatting.nb",
+ExpressionUUID->"a549f31c-99cb-422c-9eff-3ca661930759"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[561, 20, 104, 0, 36, 49, 0, "StyleData", "StyleDefinitions", "",ExpressionUUID->"ad67a915-cbfc-4cce-86bf-2318cce7d69c"],
+Cell[668, 22, 1633, 36, 39,ExpressionUUID->"01b94a02-4c2b-4789-ae90-06c046445def"]
+}
+]
+*)
+
+(* End of internal cache information *)
+
