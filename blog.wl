@@ -249,7 +249,7 @@ generateFrontMatter[assoc_] := {StringRiffle[
 CopyTextToClipboard[obj_] := CopyToClipboard[extractText[obj]]
 NotebookWordCount[obj_] := WordCount[extractText[obj]]
 NotebookWordCloud[obj_, maxItems_Integer:57] := WordCloud[
-	extractText[obj],
+	ToLowerCase @ extractText[obj],
 	WordSelectionFunction -> (And[StringLength[#]>3, StringMatchQ[#, LetterCharacter..]]&),
 	ImageSize -> {700,100},
 	ColorFunction->ColorData["Pastel"],
