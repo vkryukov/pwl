@@ -256,7 +256,7 @@ NotebookWordCloud[obj_, maxItems_Integer:57] := WordCloud[
 	MaxItems -> maxItems]
 
 extractText[obj_] := StringRiffle[
-	NotebookImport[obj, "Text"|"Section"|"Subsection"|"Subsubsection""Item"|
+	NotebookImport[obj, "Text"|"Section"|"Subsection"|"Subsubsection"|"Item"|
 		"Subitem"|"Subsubitem"|"ItemNumbered"|"SubitemNumbered"|"SubsubitemNumbered"->"Text"],
 	"\n\n"]
 
