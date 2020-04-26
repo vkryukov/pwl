@@ -167,18 +167,21 @@ Options[ConvertToMarkdown] = {
 
 
 (* ::Text:: *)
-(*The following function returns a place where jekyll delimiter for excerpt (by default, <!--more-->) should be inserted.*)
+(*We also ignore all the subsubsections called "Draft", to allow scratch calculations inside a notebook that won't find it's way to the final output. It's not the most elegant solution, more like an MWP.*)
 
 
-findExcerpt[cells_List] := Module[
-	{pos},
-	If[
-		MatchQ[cells[[3]], Cell["Summary", "Subsubsection"]],
-		(* True - looking for (sub...) section *)
-		pos = Position[cells[[4;;]], Cell[_, "Section"|"Subsection"|"Subsubsection"]];
-		If[Length[pos] > 0, pos[[1,1]], 1],
-		(* False *)
-		1]]
+processSummaryAndDrafts[cells_List] := Module[
+	{sections = DeleteCases[
+		Split[cells, Not[MemberQ[{"Section","Subsection","Subsubsection"}, Last[#2]]]&],
+		{Cell["Draft", ___], ___}],
+	 moreCell = Cell["<!--more-->", "Text"]},
+	Print[Length[sections]];
+	sections[[1]] = If[MatchQ[sections[[1, 1]], Cell["Summary", "Subsubsection"]],
+		(* Summary section - remove the title and add excerpt separator after *)
+		Append[Rest[sections[[1]]], moreCell],
+		(* No summary section - just add the excerpt separator after the first sentence *)
+		Insert[sections[[1]], moreCell, 2]];
+	Flatten[sections, 1]]
 
 
 (* ::Text:: *)
@@ -189,13 +192,12 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 	{$pageWidth = OptionValue["width"], target = OptionValue["jekyllDir"],
 	 $imageNumber=1, $imageOutputDir, $imagePrefix, 
 	 cells = nbCells[nb], processedCells,
-	 header, title, date, excerpt, wordcloud, source,
+	 header, title, date, wordcloud, source,
 	 postName, output},
 		 
 	target = ExpandFileName[target];
 	header = getHeader[cells]; If[FailureQ[header], Return[$Failed]];
 	{title, date} = header;
-	excerpt = findExcerpt[cells];
 	
 	
 	postName = date <> "-" <> StringReplace[ ToLowerCase[title], Except[LetterCharacter]..->"-"];
@@ -204,13 +206,7 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 	$imagePrefix = "/assets/" <> postName <>"/";
 	wordcloud = FileNameJoin[{"/assets", postName, "wordcloud.png"}];
 	source = "/assets/notebooks/" <> postName <> ".nb.gz";
-	processedCells = Insert[
-		processCell /@ cells[[3;;]],
-		"\n\n<!--more-->\n\n", 
-		excerpt + 1];
-	(* Remove explicit Summary title *)
-	If[excerpt > 1, processedCells = Delete[processedCells, 1]];
-
+	
 	output = Join[
 		generateFrontMatter[<|
 			"layout" -> "post", 
@@ -218,7 +214,7 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 			"wordcloud" -> wordcloud,
 			"source" -> source
 			|>],
-		processedCells,
+		processCell /@ processSummaryAndDrafts[cells[[3;;]]],
 		{"[<small>Download this notebook</small>](/assets/notebooks/"<>postName<>".nb.gz)"}];
 	Export[
 		FileNameJoin[{target, "_posts", postName <> ".markdown"}],
@@ -232,10 +228,14 @@ ConvertToMarkdown[nb_NotebookObject, OptionsPattern[]] := Block[
 		NotebookWordCloud[nb]];]
 
 
+(* ::Text:: *)
+(*Front matter allows us to define a post-level parameters which will be used by Jekyll engine to format the index or the post one way or another.*)
+
+
 generateFrontMatter[assoc_] := {StringRiffle[
 	{
 		"---", 
-		Splice@KeyValueMap[Function[{key,value}, key <> ": " <> value], assoc], 
+		Splice @ KeyValueMap[Function[{key,value}, key <> ": " <> value], assoc], 
 		"---", 
 		"\n"
 	},
