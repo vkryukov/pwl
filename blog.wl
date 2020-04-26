@@ -175,7 +175,6 @@ processSummaryAndDrafts[cells_List] := Module[
 		Split[cells, Not[MemberQ[{"Section","Subsection","Subsubsection"}, Last[#2]]]&],
 		{Cell["Draft", ___], ___}],
 	 moreCell = Cell["<!--more-->", "Text"]},
-	Print[Length[sections]];
 	sections[[1]] = If[MatchQ[sections[[1, 1]], Cell["Summary", "Subsubsection"]],
 		(* Summary section - remove the title and add excerpt separator after *)
 		Append[Rest[sections[[1]]], moreCell],
